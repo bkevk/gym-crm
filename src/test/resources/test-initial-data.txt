@@ -1,0 +1,4 @@
+trainee,1,John,Smith,true,2000-01-01,123 Main St
+trainer,2,Jane,Doe,true,Yoga
+training,3,1,2,Yoga Basics,YOGA,2024-03-01T10:00,60
+# This is a comment

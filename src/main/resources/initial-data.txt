@@ -1,0 +1,6 @@
+trainee,1,John,Smith,true,2000-01-01,123 Main St
+trainee,2,Anna,Brown,true,1995-05-15,456 Oak Ave
+trainer,1,Jane,Doe,true,Yoga
+trainer,2,Mark,Lee,true,Strength
+training,1,1,1,Yoga Basics,YOGA,2024-03-01T10:00,60
+training,2,2,2,Strength 101,STRENGTH,2024-03-02T11:00,45
