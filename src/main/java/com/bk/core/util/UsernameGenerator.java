@@ -15,7 +15,6 @@ public class UsernameGenerator {
     private TraineeDao traineeDao;
     private TrainerDao trainerDao;
 
-    // Setter injection for DAOs
     public void setTraineeDao(TraineeDao traineeDao) {
         this.traineeDao = traineeDao;
     }
@@ -32,7 +31,7 @@ public class UsernameGenerator {
         boolean exists;
         do {
             exists = false;
-            // Check trainees
+
             if (traineeDao != null) {
                 for (Trainee t : traineeDao.findAll()) {
                     if (t.getUsername() != null && t.getUsername().equalsIgnoreCase(username)) {
@@ -41,7 +40,7 @@ public class UsernameGenerator {
                     }
                 }
             }
-            // Check trainers
+
             if (!exists && trainerDao != null) {
                 for (Trainer tr : trainerDao.findAll()) {
                     if (tr.getUsername() != null && tr.getUsername().equalsIgnoreCase(username)) {
