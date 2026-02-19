@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class TrainingServiceImpl implements TrainingService {
-    private static final Logger logger = LoggerFactory.getLogger(TrainingServiceImpl.class);
 
     private TrainingDao trainingDao;
 

@@ -3,9 +3,10 @@ package com.bk.core.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class PasswordGenerator {
-    private static final Logger logger = LoggerFactory.getLogger(PasswordGenerator.class);
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int PASSWORD_LENGTH = 10;
     private static final SecureRandom random = new SecureRandom();

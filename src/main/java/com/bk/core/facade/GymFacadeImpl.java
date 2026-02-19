@@ -11,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class GymFacadeImpl implements GymFacade {
-    private static final Logger logger = LoggerFactory.getLogger(GymFacadeImpl.class);
 
     private final TraineeService traineeService;
     private final TrainerService trainerService;

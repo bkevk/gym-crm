@@ -14,11 +14,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class Storage {
 
-    private static final Logger logger = LoggerFactory.getLogger(Storage.class);
 
     public static final String TRAINEE_NAMESPACE = "trainee";
     public static final String TRAINER_NAMESPACE = "trainer";

@@ -10,10 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 public class TrainerDaoImpl implements TrainerDao {
-    private static final Logger logger = LoggerFactory.getLogger(TrainerDaoImpl.class);
     private Storage storage;
 
     @Override
