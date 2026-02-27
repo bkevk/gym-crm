@@ -1,0 +1,72 @@
+package com.bk.gym.service.impl;
+
+import com.bk.gym.dao.TraineeDao;
+import com.bk.gym.model.Trainee;
+import com.bk.gym.service.TraineeService;
+import com.bk.gym.util.PasswordGenerator;
+import com.bk.gym.util.UsernameGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class TraineeServiceImpl implements TraineeService {
+    private TraineeDao traineeDao;
+
+    private UsernameGenerator usernameGenerator;
+
+    @Autowired
+    public void setUsernameGenerator(UsernameGenerator usernameGenerator) {
+        this.usernameGenerator = usernameGenerator;
+    }
+
+    @Autowired
+    public void setTraineeDaoForUsernameGenerator(TraineeDao traineeDao) {
+        if (usernameGenerator != null) {
+            usernameGenerator.setTraineeDao(traineeDao);
+        }
+    }
+    @Autowired
+    public void setTraineeDao(TraineeDao traineeDao) {
+        this.traineeDao = traineeDao;
+    }
+
+    @Override
+    public void createTrainee(Trainee trainee) {
+        String username = usernameGenerator.generateUniqueUsername(trainee.getFirstName(), trainee.getLastName());
+        String password = PasswordGenerator.generateRandomPassword();
+        trainee.setUsername(username);
+        trainee.setPassword(password);
+        traineeDao.save(trainee);
+        log.info("Created Trainee with username: {} and password: {}", username, password);
+    }
+
+    @Override
+    public Trainee getTrainee(Long id) {
+        Trainee trainee = traineeDao.findById(id);
+        log.debug("Retrieved Trainee: {}", trainee);
+        return trainee;
+    }
+
+    @Override
+    public List<Trainee> getAllTrainees() {
+        List<Trainee> trainees = traineeDao.findAll();
+        log.debug("Retrieved all Trainees: count={}", trainees.size());
+        return trainees;
+    }
+
+    @Override
+    public void updateTrainee(Trainee trainee) {
+        traineeDao.update(trainee);
+        log.info("Updated Trainee: {}", trainee);
+    }
+
+    @Override
+    public void deleteTrainee(Long id) {
+        traineeDao.delete(id);
+        log.info("Deleted Trainee with id: {}", id);
+    }
+}

@@ -1,0 +1,52 @@
+package com.bk.gym.service.impl;
+
+import com.bk.gym.dao.TrainingDao;
+import com.bk.gym.model.Training;
+import com.bk.gym.service.TrainingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class TrainingServiceImpl implements TrainingService {
+    private TrainingDao trainingDao;
+
+    @Override
+    public void createTraining(Long id, Training training) {
+        trainingDao.save(id, training);
+        log.info("Created Training: {}", training);
+    }
+
+    @Override
+    public Training getTraining(Long id) {
+        Training training = trainingDao.findById(id);
+        log.debug("Retrieved Training: {}", training);
+        return training;
+    }
+
+    @Override
+    public List<Training> getAllTrainings() {
+        List<Training> trainings = trainingDao.findAll();
+        log.debug("Retrieved all Trainings: count={}", trainings.size());
+        return trainings;
+    }
+
+    @Override
+    public void updateTraining(Long id, Training training) {
+        trainingDao.update(id, training);
+        log.info("Updated Training: {}", training);
+    }
+
+    @Override
+    public void deleteTraining(Long id) {
+        trainingDao.delete(id);
+        log.info("Deleted Training with id: {}", id);
+    }
+    @Autowired
+    public void setTrainerDao(TrainingDao trainingDao) {
+        this.trainingDao = trainingDao;
+    }
+}
