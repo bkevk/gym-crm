@@ -4,14 +4,12 @@ import com.bk.core.dao.TraineeDao;
 import com.bk.core.dao.TrainerDao;
 import com.bk.core.model.Trainee;
 import com.bk.core.model.Trainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class UsernameGenerator {
-    private static final Logger logger = LoggerFactory.getLogger(UsernameGenerator.class);
-
     private TraineeDao traineeDao;
     private TrainerDao trainerDao;
 
@@ -56,7 +54,7 @@ public class UsernameGenerator {
             }
         } while (exists);
 
-        logger.debug("Generated unique username: {}", username);
+        log.debug("Generated unique username: {}", username);
         return username;
     }
 }

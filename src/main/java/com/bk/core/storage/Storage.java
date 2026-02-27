@@ -3,8 +3,6 @@ package com.bk.core.storage;
 import com.bk.core.model.*;
 
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +12,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class Storage {
-
-    private static final Logger logger = LoggerFactory.getLogger(Storage.class);
-
     public static final String TRAINEE_NAMESPACE = "trainee";
     public static final String TRAINER_NAMESPACE = "trainer";
     public static final String TRAINING_NAMESPACE = "training";
@@ -37,7 +34,7 @@ public class Storage {
 
     @PostConstruct
     public void init() {
-        logger.info("Initializing storage from file: {}", initFilePath);
+        log.info("Initializing storage from file: {}", initFilePath);
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(initFilePath))
@@ -64,7 +61,7 @@ public class Storage {
                                     traineeId // userId
                             );
                             storage.get(TRAINEE_NAMESPACE).put(traineeId, trainee);
-                            logger.debug("Loaded Trainee: {}", trainee);
+                            log.debug("Loaded Trainee: {}", trainee);
                             break;
                         case "trainer":
                             // trainer,1,Jane,Doe,true,Yoga
@@ -77,7 +74,7 @@ public class Storage {
                                     trainerId // userId
                             );
                             storage.get(TRAINER_NAMESPACE).put(trainerId, trainer);
-                            logger.debug("Loaded Trainer: {}", trainer);
+                            log.debug("Loaded Trainer: {}", trainer);
                             break;
                         case "training":
                             // training,1,1,1,Yoga Basics,YOGA,2024-03-01T10:00,60
@@ -97,18 +94,18 @@ public class Storage {
                                     duration
                             );
                             storage.get(TRAINING_NAMESPACE).put(trainingId, training);
-                            logger.debug("Loaded Training: {}", training);
+                            log.debug("Loaded Training: {}", training);
                             break;
                         default:
-                            logger.warn("Unknown entity type '{}' at line {}: {}", tokens[0], lineNumber, line);
+                            log.warn("Unknown entity type '{}' at line {}: {}", tokens[0], lineNumber, line);
                     }
                 } catch (Exception parseEx) {
-                    logger.error("Failed to parse line {}: {}. Error: {}", lineNumber, line, parseEx.getMessage());
+                    log.error("Failed to parse line {}: {}. Error: {}", lineNumber, line, parseEx.getMessage());
                 }
             }
-            logger.info("Storage initialized successfully from file: {}", initFilePath);
+            log.info("Storage initialized successfully from file: {}", initFilePath);
         } catch (Exception e) {
-            logger.error("Failed to initialize storage from file '{}': {}", initFilePath, e.getMessage(), e);
+            log.error("Failed to initialize storage from file '{}': {}", initFilePath, e.getMessage(), e);
         }
     }
 
@@ -118,23 +115,23 @@ public class Storage {
 
     public void put(String namespace, Long id, Object obj) {
         storage.get(namespace).put(id, obj);
-        logger.debug("Put object in namespace '{}': id={}, obj={}", namespace, id, obj);
+        log.debug("Put object in namespace '{}': id={}, obj={}", namespace, id, obj);
     }
 
     public Object get(String namespace, Long id) {
         Object obj = storage.get(namespace).get(id);
-        logger.debug("Get object from namespace '{}': id={}, obj={}", namespace, id, obj);
+        log.debug("Get object from namespace '{}': id={}, obj={}", namespace, id, obj);
         return obj;
     }
 
     public Collection<Object> getAll(String namespace) {
         Collection<Object> all = storage.get(namespace).values();
-        logger.debug("Get all objects from namespace '{}': count={}", namespace, all.size());
+        log.debug("Get all objects from namespace '{}': count={}", namespace, all.size());
         return all;
     }
 
     public void remove(String namespace, Long id) {
         storage.get(namespace).remove(id);
-        logger.debug("Removed object from namespace '{}': id={}", namespace, id);
+        log.debug("Removed object from namespace '{}': id={}", namespace, id);
     }
 }
