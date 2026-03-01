@@ -1,8 +1,8 @@
 package com.bk.gym.facade;
 
-import com.bk.gym.model.Trainee;
-import com.bk.gym.model.Trainer;
-import com.bk.gym.model.Training;
+import com.bk.gym.entity.Trainee;
+import com.bk.gym.entity.Trainer;
+import com.bk.gym.entity.Training;
 import com.bk.gym.service.TraineeService;
 import com.bk.gym.service.TrainerService;
 import com.bk.gym.service.TrainingService;
@@ -97,8 +97,8 @@ public class GymFacadeImpl implements GymFacade {
 
     // Training operations
     @Override
-    public void createTraining(Long id, Training training) {
-        trainingService.createTraining(id, training);
+    public void createTraining(Training training) {
+        trainingService.createTraining(training);
         log.info("Facade: Created Training {}", training);
     }
 
@@ -117,8 +117,8 @@ public class GymFacadeImpl implements GymFacade {
     }
 
     @Override
-    public void updateTraining(Long id, Training training) {
-        trainingService.updateTraining(id, training);
+    public void updateTraining(Training training) {
+        trainingService.updateTraining(training);
         log.info("Facade: Updated Training {}", training);
     }
 

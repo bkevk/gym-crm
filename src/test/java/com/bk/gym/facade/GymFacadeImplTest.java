@@ -1,8 +1,8 @@
 package com.bk.gym.facade;
 
-import com.bk.gym.model.Trainee;
-import com.bk.gym.model.Trainer;
-import com.bk.gym.model.Training;
+import com.bk.gym.entity.Trainee;
+import com.bk.gym.entity.Trainer;
+import com.bk.gym.entity.Training;
 import com.bk.gym.service.TraineeService;
 import com.bk.gym.service.TrainerService;
 import com.bk.gym.service.TrainingService;
@@ -94,8 +94,8 @@ class GymFacadeImplTest {
     @Test
     void testCreateTraining_DelegatesToService() {
         Training training = mock(Training.class);
-        gymFacade.createTraining(1L, training);
-        verify(trainingService).createTraining(1L, training);
+        gymFacade.createTraining(training);
+        verify(trainingService).createTraining(training);
     }
 
     @Test
@@ -113,8 +113,8 @@ class GymFacadeImplTest {
     @Test
     void testUpdateTraining_DelegatesToService() {
         Training training = mock(Training.class);
-        gymFacade.updateTraining(1L, training);
-        verify(trainingService).updateTraining(1L, training);
+        gymFacade.updateTraining(training);
+        verify(trainingService).updateTraining(training);
     }
 
     @Test

@@ -1,12 +1,12 @@
 package com.bk.gym.service;
 
-import com.bk.gym.model.Training;
+import com.bk.gym.entity.Training;
 import java.util.List;
 
 public interface TrainingService {
-    void createTraining(Long id, Training training);
+    void createTraining(Training training);
     Training getTraining(Long id);
     List<Training> getAllTrainings();
-    void updateTraining(Long id, Training training);
+    void updateTraining(Training training);
     void deleteTraining(Long id);
 }

@@ -1,7 +1,7 @@
 package com.bk.gym.dao.impl;
 
 import com.bk.gym.dao.TraineeDao;
-import com.bk.gym.model.Trainee;
+import com.bk.gym.entity.Trainee;
 import com.bk.gym.storage.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

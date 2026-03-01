@@ -1,9 +1,9 @@
 package com.bk.gym.util;
 
-import com.bk.gym.dao.TraineeDao;
-import com.bk.gym.dao.TrainerDao;
-import com.bk.gym.model.Trainee;
-import com.bk.gym.model.Trainer;
+import com.bk.gym.entity.Trainee;
+import com.bk.gym.entity.Trainer;
+import com.bk.gym.repository.TraineeRepository;
+import com.bk.gym.repository.TrainerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,22 +16,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class UsernameGeneratorTest {
 
     private UsernameGenerator usernameGenerator;
-    private TraineeDao traineeDao;
-    private TrainerDao trainerDao;
+    private TraineeRepository traineeRepository;
+    private TrainerRepository trainerRepository;
 
     @BeforeEach
     void setUp() {
         usernameGenerator = new UsernameGenerator();
-        traineeDao = Mockito.mock(TraineeDao.class);
-        trainerDao = Mockito.mock(TrainerDao.class);
-        usernameGenerator.setTraineeDao(traineeDao);
-        usernameGenerator.setTrainerDao(trainerDao);
+        traineeRepository = Mockito.mock(TraineeRepository.class);
+        trainerRepository = Mockito.mock(TrainerRepository.class);
+        usernameGenerator.setTraineeRepository(traineeRepository);
+        usernameGenerator.setTrainerRepository(trainerRepository);
     }
 
     @Test
     void testGenerateUniqueUsername_NoConflict() {
-        Mockito.when(traineeDao.findAll()).thenReturn(Collections.emptyList());
-        Mockito.when(trainerDao.findAll()).thenReturn(Collections.emptyList());
+        Mockito.when(traineeRepository.findAll()).thenReturn(Collections.emptyList());
+        Mockito.when(trainerRepository.findAll()).thenReturn(Collections.emptyList());
         String username = usernameGenerator.generateUniqueUsername("John", "Smith");
         assertEquals("John.Smith", username);
     }
@@ -40,8 +40,8 @@ class UsernameGeneratorTest {
     void testGenerateUniqueUsername_ConflictWithTrainee() {
         Trainee existingTrainee = new Trainee("John", "Smith", true, null, null, 1L);
         existingTrainee.setUsername("John.Smith");
-        Mockito.when(traineeDao.findAll()).thenReturn(Arrays.asList(existingTrainee));
-        Mockito.when(trainerDao.findAll()).thenReturn(Collections.emptyList());
+        Mockito.when(traineeRepository.findAll()).thenReturn(Arrays.asList(existingTrainee));
+        Mockito.when(trainerRepository.findAll()).thenReturn(Collections.emptyList());
         String username = usernameGenerator.generateUniqueUsername("John", "Smith");
         assertEquals("John.Smith1", username);
     }
@@ -50,8 +50,8 @@ class UsernameGeneratorTest {
     void testGenerateUniqueUsername_ConflictWithTrainer() {
         Trainer existingTrainer = new Trainer("John", "Smith", true, "Yoga", 2L);
         existingTrainer.setUsername("John.Smith");
-        Mockito.when(traineeDao.findAll()).thenReturn(Collections.emptyList());
-        Mockito.when(trainerDao.findAll()).thenReturn(Arrays.asList(existingTrainer));
+        Mockito.when(traineeRepository.findAll()).thenReturn(Collections.emptyList());
+        Mockito.when(trainerRepository.findAll()).thenReturn(Arrays.asList(existingTrainer));
         String username = usernameGenerator.generateUniqueUsername("John", "Smith");
         assertEquals("John.Smith1", username);
     }
@@ -62,8 +62,8 @@ class UsernameGeneratorTest {
         t1.setUsername("John.Smith");
         Trainer tr1 = new Trainer("John", "Smith", true, "Yoga", 2L);
         tr1.setUsername("John.Smith1");
-        Mockito.when(traineeDao.findAll()).thenReturn(Arrays.asList(t1));
-        Mockito.when(trainerDao.findAll()).thenReturn(Arrays.asList(tr1));
+        Mockito.when(traineeRepository.findAll()).thenReturn(Arrays.asList(t1));
+        Mockito.when(trainerRepository.findAll()).thenReturn(Arrays.asList(tr1));
         String username = usernameGenerator.generateUniqueUsername("John", "Smith");
         assertEquals("John.Smith2", username);
     }

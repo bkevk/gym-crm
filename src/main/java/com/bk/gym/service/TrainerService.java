@@ -1,6 +1,7 @@
 package com.bk.gym.service;
 
-import com.bk.gym.model.Trainer;
+import com.bk.gym.entity.Trainee;
+import com.bk.gym.entity.Trainer;
 import java.util.List;
 
 public interface TrainerService {
@@ -9,4 +10,9 @@ public interface TrainerService {
     List<Trainer> getAllTrainers();
     void updateTrainer(Trainer trainer);
     void deleteTrainer(Long id);
+    boolean authenticateTrainer(String username, String password);
+    Trainer getTraineeByUsername(String userName);
+    boolean passwordChange(String username, String oldPassword, String newPassword);
+    void activateTrainer(Long id);
+    void deactivateTrainer(Long id);
 }

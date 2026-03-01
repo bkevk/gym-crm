@@ -1,8 +1,8 @@
 package com.bk.gym.service.impl;
 
-
-import com.bk.gym.dao.TrainerDao;
-import com.bk.gym.model.Trainer;
+import com.bk.gym.entity.Trainee;
+import com.bk.gym.entity.Trainer;
+import com.bk.gym.repository.TrainerRepository;
 import com.bk.gym.service.TrainerService;
 import com.bk.gym.util.PasswordGenerator;
 import com.bk.gym.util.UsernameGenerator;
@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class TrainerServiceImpl implements TrainerService {
-    private TrainerDao trainerDao;
+    private TrainerRepository trainerRepository;
 
     private UsernameGenerator usernameGenerator;
 
@@ -25,15 +27,15 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Autowired
-    public void setTrainerDaoForUsernameGenerator(TrainerDao trainerDao) {
+    public void setTrainerRepositoryForUsernameGenerator(TrainerRepository trainerRepository) {
         if (usernameGenerator != null) {
-            usernameGenerator.setTrainerDao(trainerDao);
+            usernameGenerator.setTrainerRepository(trainerRepository);
         }
     }
 
     @Autowired
-    public void setTrainerDao(TrainerDao trainerDao) {
-        this.trainerDao = trainerDao;
+    public void setTrainerRepository(TrainerRepository trainerRepository) {
+        this.trainerRepository = trainerRepository;
     }
 
     @Override
@@ -42,33 +44,73 @@ public class TrainerServiceImpl implements TrainerService {
         String password = PasswordGenerator.generateRandomPassword();
         trainer.setUsername(username);
         trainer.setPassword(password);
-        trainerDao.save(trainer);
+        trainerRepository.save(trainer);
         log.info("Created Trainer with username: {} and password: {}", username, password);
     }
 
     @Override
     public Trainer getTrainer(Long id) {
-        Trainer trainer = trainerDao.findById(id);
+        Trainer trainer = trainerRepository.findById(id).orElse(null);
         log.debug("Retrieved Trainer: {}", trainer);
         return trainer;
     }
 
     @Override
     public List<Trainer> getAllTrainers() {
-        List<Trainer> trainers = trainerDao.findAll();
+        List<Trainer> trainers = trainerRepository.findAll();
         log.debug("Retrieved all Trainers: count={}", trainers.size());
         return trainers;
     }
 
     @Override
     public void updateTrainer(Trainer trainer) {
-        trainerDao.update(trainer);
+        trainerRepository.save(trainer);
         log.info("Updated Trainer: {}", trainer);
     }
 
     @Override
     public void deleteTrainer(Long id) {
-        trainerDao.delete(id);
+        trainerRepository.deleteById(id);
         log.info("Deleted Trainer with id: {}", id);
+    }
+
+    @Override
+    public boolean authenticateTrainer(String username, String password) {
+        Optional<Trainer> trainer = trainerRepository.findTrainerByUsername(username);
+        return trainer.filter(value -> password.equals(value.getUsername())).isPresent();
+    }
+
+    @Override
+    public Trainer getTraineeByUsername(String userName) {
+        return trainerRepository.findTrainerByUsername(userName).orElse(null);
+    }
+
+    @Override
+    public boolean passwordChange(String username, String oldPassword, String newPassword) {
+        if(authenticateTrainer(username, oldPassword)){
+            Trainer trainer = trainerRepository.findTrainerByUsername(username).get();
+            trainer.setPassword(newPassword);
+            trainerRepository.save(trainer);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void activateTrainer(Long id) {
+        Trainer trainer = trainerRepository.findById(id).orElse(null);
+        if(trainer != null) {
+            trainer.setActive(true);
+            trainerRepository.save(trainer);
+        }
+    }
+
+    @Override
+    public void deactivateTrainer(Long id) {
+        Trainer trainer = trainerRepository.findById(id).orElse(null);
+        if(trainer != null) {
+            trainer.setActive(false);
+            trainerRepository.save(trainer);
+        }
     }
 }
