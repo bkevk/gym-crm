@@ -1,6 +1,6 @@
 package com.bk.gym.dao;
 
-import com.bk.gym.model.Trainer;
+import com.bk.gym.entity.Trainer;
 import java.util.List;
 
 public interface TrainerDao {

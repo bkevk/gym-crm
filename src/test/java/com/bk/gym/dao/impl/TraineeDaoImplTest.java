@@ -1,6 +1,6 @@
 package com.bk.gym.dao.impl;
 
-import com.bk.gym.model.Trainee;
+import com.bk.gym.entity.Trainee;
 import com.bk.gym.storage.Storage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

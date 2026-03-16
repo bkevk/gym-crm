@@ -1,7 +1,7 @@
 package com.bk.gym.service;
 
-import com.bk.gym.dao.TrainerDao;
-import com.bk.gym.model.Trainer;
+import com.bk.gym.entity.Trainer;
+import com.bk.gym.repository.TrainerRepository;
 import com.bk.gym.util.UsernameGenerator;
 import com.bk.gym.service.impl.TrainerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,23 +9,24 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class TrainerServiceImplTest {
 
-    private TrainerDao trainerDao;
+    private TrainerRepository trainerRepository;
     private UsernameGenerator usernameGenerator;
     private TrainerServiceImpl trainerService;
 
     @BeforeEach
     void setUp() {
-        trainerDao = mock(TrainerDao.class);
+        trainerRepository = mock(TrainerRepository.class);
         usernameGenerator = mock(UsernameGenerator.class);
         trainerService = new TrainerServiceImpl();
         trainerService.setUsernameGenerator(usernameGenerator);
-        trainerService.setTrainerDao(trainerDao);
+        trainerService.setTrainerRepository(trainerRepository);
     }
 
     @Test
@@ -36,7 +37,7 @@ class TrainerServiceImplTest {
         trainerService.createTrainer(trainer);
 
         ArgumentCaptor<Trainer> captor = ArgumentCaptor.forClass(Trainer.class);
-        verify(trainerDao).save(captor.capture());
+        verify(trainerRepository).save(captor.capture());
         Trainer saved = captor.getValue();
         assertEquals("Jane.Doe", saved.getUsername());
         assertNotNull(saved.getPassword());
@@ -46,14 +47,14 @@ class TrainerServiceImplTest {
     @Test
     void testGetTrainer_ReturnsCorrectTrainer() {
         Trainer trainer = new Trainer("Jane", "Doe", true, "Yoga", 1L);
-        when(trainerDao.findById(1L)).thenReturn(trainer);
+        when(trainerRepository.findById(1L)).thenReturn(Optional.of(trainer));
         Trainer result = trainerService.getTrainer(1L);
         assertEquals(trainer, result);
     }
 
     @Test
     void testGetAllTrainers_ReturnsList() {
-        when(trainerDao.findAll()).thenReturn(Arrays.asList(
+        when(trainerRepository.findAll()).thenReturn(Arrays.asList(
                 new Trainer("A", "B", true, "Spec", 1L),
                 new Trainer("C", "D", true, "Spec", 2L)
         ));
@@ -64,12 +65,12 @@ class TrainerServiceImplTest {
     void testUpdateTrainer_DelegatesToDao() {
         Trainer trainer = new Trainer("Jane", "Doe", true, "Yoga", 1L);
         trainerService.updateTrainer(trainer);
-        verify(trainerDao).update(trainer);
+        verify(trainerRepository).save(trainer);
     }
 
     @Test
     void testDeleteTrainer_DelegatesToDao() {
         trainerService.deleteTrainer(1L);
-        verify(trainerDao).delete(1L);
+        verify(trainerRepository).deleteById(1L);
     }
 }

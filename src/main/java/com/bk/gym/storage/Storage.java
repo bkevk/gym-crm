@@ -1,6 +1,6 @@
 package com.bk.gym.storage;
 
-import com.bk.gym.model.*;
+import com.bk.gym.entity.*;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;

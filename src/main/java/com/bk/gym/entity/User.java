@@ -1,4 +1,4 @@
-package com.bk.gym.model;
+package com.bk.gym.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

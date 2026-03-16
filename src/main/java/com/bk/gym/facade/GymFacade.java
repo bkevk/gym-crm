@@ -1,8 +1,8 @@
 package com.bk.gym.facade;
 
-import com.bk.gym.model.Trainee;
-import com.bk.gym.model.Trainer;
-import com.bk.gym.model.Training;
+import com.bk.gym.entity.Trainee;
+import com.bk.gym.entity.Trainer;
+import com.bk.gym.entity.Training;
 
 import java.util.List;
 
@@ -22,9 +22,9 @@ public interface GymFacade {
     void deleteTrainer(Long id);
 
     // Training operations
-    void createTraining(Long id, Training training);
+    void createTraining(Training training);
     Training getTraining(Long id);
     List<Training> getAllTrainings();
-    void updateTraining(Long id, Training training);
+    void updateTraining(Training training);
     void deleteTraining(Long id);
 }

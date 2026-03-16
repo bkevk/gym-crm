@@ -1,4 +1,4 @@
-package com.bk.gym.model;
+package com.bk.gym.entity;
 
 public enum TrainingType {
     CARDIO,

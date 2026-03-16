@@ -1,26 +1,20 @@
 package com.bk.gym.util;
 
-import com.bk.gym.dao.TraineeDao;
-import com.bk.gym.dao.TrainerDao;
-import com.bk.gym.model.Trainee;
-import com.bk.gym.model.Trainer;
+import com.bk.gym.entity.Trainee;
+import com.bk.gym.entity.Trainer;
+import com.bk.gym.repository.TraineeRepository;
+import com.bk.gym.repository.TrainerRepository;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
+@Setter
 @Slf4j
 @Component
 public class UsernameGenerator {
-    private TraineeDao traineeDao;
-    private TrainerDao trainerDao;
-
     // Setter injection for DAOs
-    public void setTraineeDao(TraineeDao traineeDao) {
-        this.traineeDao = traineeDao;
-    }
-
-    public void setTrainerDao(TrainerDao trainerDao) {
-        this.trainerDao = trainerDao;
-    }
+    private TraineeRepository traineeRepository;
+    private TrainerRepository trainerRepository;
 
     public String generateUniqueUsername(String firstName, String lastName) {
         String baseUsername = firstName + "." + lastName;
@@ -31,8 +25,8 @@ public class UsernameGenerator {
         do {
             exists = false;
             // Check trainees
-            if (traineeDao != null) {
-                for (Trainee t : traineeDao.findAll()) {
+            if (traineeRepository != null) {
+                for (Trainee t : traineeRepository.findAll()) {
                     if (t.getUsername() != null && t.getUsername().equalsIgnoreCase(username)) {
                         exists = true;
                         break;
@@ -40,8 +34,8 @@ public class UsernameGenerator {
                 }
             }
             // Check trainers
-            if (!exists && trainerDao != null) {
-                for (Trainer tr : trainerDao.findAll()) {
+            if (!exists && trainerRepository != null) {
+                for (Trainer tr : trainerRepository.findAll()) {
                     if (tr.getUsername() != null && tr.getUsername().equalsIgnoreCase(username)) {
                         exists = true;
                         break;
