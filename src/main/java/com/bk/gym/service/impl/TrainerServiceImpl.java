@@ -1,5 +1,7 @@
 package com.bk.gym.service.impl;
 
+import com.bk.gym.dto.TrainerRegistrationRequest;
+import com.bk.gym.dto.TrainerRegistrationResponse;
 import com.bk.gym.entity.Trainee;
 import com.bk.gym.entity.Trainer;
 import com.bk.gym.repository.TrainerRepository;
@@ -21,10 +23,17 @@ public class TrainerServiceImpl implements TrainerService {
 
     private UsernameGenerator usernameGenerator;
 
+    private PasswordGenerator passwordGenerator;
+
     @Autowired
     public void setUsernameGenerator(UsernameGenerator usernameGenerator) {
         this.usernameGenerator = usernameGenerator;
     }
+    @Autowired
+    public void setPasswordGenerator(PasswordGenerator passwordGenerator) {
+        this.passwordGenerator = passwordGenerator;
+    }
+
 
     @Autowired
     public void setTrainerRepositoryForUsernameGenerator(TrainerRepository trainerRepository) {
@@ -112,5 +121,27 @@ public class TrainerServiceImpl implements TrainerService {
             trainer.setActive(false);
             trainerRepository.save(trainer);
         }
+    }
+
+    @Override
+    public TrainerRegistrationResponse registerTrainer(TrainerRegistrationRequest request, String transactionId) {
+        log.info("[{}] Registering trainer: {}", transactionId, request);
+
+        String username = usernameGenerator.generateUniqueUsername(request.getFirstName(), request.getLastName());
+        String password = passwordGenerator.generateRandomPassword();
+
+        Trainer trainer = new Trainer();
+        trainer.setFirstName(request.getFirstName());
+        trainer.setLastName(request.getLastName());
+        trainer.setUsername(username);
+        trainer.setPassword(password);
+        trainer.setSpecialization(request.getSpecialization());
+        trainer.setActive(true);
+
+        trainerRepository.save(trainer);
+
+        log.info("[{}] Registered trainer: username={}, password={}", transactionId, username, password);
+        return new TrainerRegistrationResponse(username, password);
+
     }
 }
