@@ -1,5 +1,7 @@
 package com.bk.gym.service.impl;
 
+import com.bk.gym.dto.TraineeRegistrationRequest;
+import com.bk.gym.dto.TraineeRegistrationResponse;
 import com.bk.gym.entity.Trainee;
 import com.bk.gym.repository.TraineeRepository;
 import com.bk.gym.service.TraineeService;
@@ -8,6 +10,7 @@ import com.bk.gym.util.UsernameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +23,16 @@ public class TraineeServiceImpl implements TraineeService {
 
     private UsernameGenerator usernameGenerator;
 
+    private PasswordGenerator passwordGenerator;
+
     @Autowired
     public void setUsernameGenerator(UsernameGenerator usernameGenerator) {
         this.usernameGenerator = usernameGenerator;
+    }
+
+    @Autowired
+    public void setPasswordGenerator(PasswordGenerator passwordGenerator) {
+        this.passwordGenerator = passwordGenerator;
     }
 
     @Autowired
@@ -111,4 +121,29 @@ public class TraineeServiceImpl implements TraineeService {
             traineeRepository.save(trainee);
         }
     }
+
+    @Override
+    public TraineeRegistrationResponse registerTrainee(TraineeRegistrationRequest request, String transactionId) {
+        log.info("[{}] Registering trainee: {}", transactionId, request);
+
+        String username = usernameGenerator.generateUniqueUsername(request.getFirstName(), request.getLastName());
+        String password = passwordGenerator.generateRandomPassword();
+
+        Trainee trainee = new Trainee();
+        trainee.setFirstName(request.getFirstName());
+        trainee.setLastName(request.getLastName());
+        trainee.setUsername(username);
+        trainee.setPassword(password);
+        if (request.getDateOfBirth() != null && !request.getDateOfBirth().isEmpty()) {
+            trainee.setDateOfBirth(LocalDate.parse(request.getDateOfBirth()));
+        }
+        trainee.setAddress(request.getAddress());
+        trainee.setActive(true);
+
+        traineeRepository.save(trainee);
+
+        log.info("[{}] Registered trainee: username={}, password={}", transactionId, username, password);
+        return new TraineeRegistrationResponse(username, password);
+    }
+
 }

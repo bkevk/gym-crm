@@ -16,7 +16,5 @@ public abstract class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.isActive = isActive;
-        this.username = null; // Will be set by service logic
-        this.password = null; // Will be set by service logic
     }
 }

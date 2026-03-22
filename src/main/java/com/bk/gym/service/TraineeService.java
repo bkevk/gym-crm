@@ -1,6 +1,10 @@
 package com.bk.gym.service;
 
+import com.bk.gym.dto.TraineeRegistrationRequest;
+import com.bk.gym.dto.TraineeRegistrationResponse;
 import com.bk.gym.entity.Trainee;
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 public interface TraineeService {
@@ -14,4 +18,6 @@ public interface TraineeService {
     boolean passwordChange(String username, String oldPassword, String newPassword);
     void activateTrainee(Long id);
     void deactivateTrainee(Long id);
+
+    TraineeRegistrationResponse registerTrainee(@Valid TraineeRegistrationRequest request, String transactionId);
 }
