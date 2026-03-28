@@ -1,10 +1,12 @@
 package com.bk.gym.entity;
 
+import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@MappedSuperclass
 public abstract class User {
     private String firstName;
     private String lastName;
