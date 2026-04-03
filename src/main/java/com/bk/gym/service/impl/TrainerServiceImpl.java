@@ -9,6 +9,7 @@ import com.bk.gym.service.TrainerService;
 import com.bk.gym.util.PasswordGenerator;
 import com.bk.gym.util.UsernameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class TrainerServiceImpl implements TrainerService {
 
     private PasswordGenerator passwordGenerator;
 
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     public void setUsernameGenerator(UsernameGenerator usernameGenerator) {
         this.usernameGenerator = usernameGenerator;
@@ -34,6 +37,10 @@ public class TrainerServiceImpl implements TrainerService {
         this.passwordGenerator = passwordGenerator;
     }
 
+    @Autowired
+    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     public void setTrainerRepositoryForUsernameGenerator(TrainerRepository trainerRepository) {
@@ -134,7 +141,7 @@ public class TrainerServiceImpl implements TrainerService {
         trainer.setFirstName(request.getFirstName());
         trainer.setLastName(request.getLastName());
         trainer.setUsername(username);
-        trainer.setPassword(password);
+        trainer.setPassword(passwordEncoder.encode(password));
         trainer.setSpecialization(request.getSpecialization());
         trainer.setActive(true);
 

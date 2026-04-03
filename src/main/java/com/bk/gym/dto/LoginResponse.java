@@ -11,8 +11,15 @@ import lombok.Setter;
 public class LoginResponse {
     @ApiModelProperty
     private String message;
+    @ApiModelProperty
+    private String token;
 
     public LoginResponse(String message) {
         this.message = message;
+    }
+
+    public LoginResponse(String message, String token) {
+        this.message = message;
+        this.token = token;
     }
 }
