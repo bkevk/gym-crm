@@ -8,6 +8,7 @@ import com.bk.gym.service.TraineeService;
 import com.bk.gym.util.PasswordGenerator;
 import com.bk.gym.util.UsernameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +25,13 @@ public class TraineeServiceImpl implements TraineeService {
     private UsernameGenerator usernameGenerator;
 
     private PasswordGenerator passwordGenerator;
+
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
     public void setUsernameGenerator(UsernameGenerator usernameGenerator) {
@@ -133,7 +141,7 @@ public class TraineeServiceImpl implements TraineeService {
         trainee.setFirstName(request.getFirstName());
         trainee.setLastName(request.getLastName());
         trainee.setUsername(username);
-        trainee.setPassword(password);
+        trainee.setPassword(passwordEncoder.encode(password));
         if (request.getDateOfBirth() != null && !request.getDateOfBirth().isEmpty()) {
             trainee.setDateOfBirth(LocalDate.parse(request.getDateOfBirth()));
         }
