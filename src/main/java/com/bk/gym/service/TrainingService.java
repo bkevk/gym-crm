@@ -4,7 +4,7 @@ import com.bk.gym.entity.Training;
 import java.util.List;
 
 public interface TrainingService {
-    void createTraining(Training training);
+    void createTraining(Training training, String jwt, String transactionId);
     Training getTraining(Long id);
     List<Training> getAllTrainings();
     void updateTraining(Training training);

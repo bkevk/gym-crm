@@ -95,7 +95,7 @@ class GymFacadeImplTest {
     void testCreateTraining_DelegatesToService() {
         Training training = mock(Training.class);
         gymFacade.createTraining(training);
-        verify(trainingService).createTraining(training);
+        verify(trainingService).createTraining(training, null, null);
     }
 
     @Test

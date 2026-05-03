@@ -98,7 +98,7 @@ public class GymFacadeImpl implements GymFacade {
     // Training operations
     @Override
     public void createTraining(Training training) {
-        trainingService.createTraining(training);
+        trainingService.createTraining(training, null, null);
         log.info("Facade: Created Training {}", training);
     }
 
