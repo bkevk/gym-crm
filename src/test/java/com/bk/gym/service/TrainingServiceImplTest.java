@@ -29,7 +29,7 @@ class TrainingServiceImplTest {
     @Test
     void testCreateTraining() {
         Training training = new Training(1L, 2L, "Cardio", TrainingType.CARDIO, LocalDateTime.now(), 45);
-        trainingService.createTraining(training);
+        trainingService.createTraining(training, null, null);
         verify(trainingRepository).save(training);
     }
 
