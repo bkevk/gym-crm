@@ -3,10 +3,10 @@ package com.bk.gym.service.impl;
 import com.bk.gym.dto.WorkloadUpdateRequest;
 import com.bk.gym.entity.Training;
 import com.bk.gym.entity.TrainingType;
-import com.bk.gym.feign.TrainerWorkloadFeignClient;
 import com.bk.gym.repository.TrainingRepository;
 import com.bk.gym.service.TrainingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,14 +19,16 @@ public class TrainingServiceImpl implements TrainingService {
     private TrainingRepository trainingRepository;
 
     @Autowired
-    private TrainerWorkloadFeignClient workloadFeignClient;
+    private JmsTemplate jmsTemplate;
+
+    private static final String WORKLOAD_QUEUE = "trainer.workload.queue";
 
     @Override
     public void createTraining(Training training, String jwt, String transactionId) {
         trainingRepository.save(training);
         log.info("Created Training: {}", training);
         WorkloadUpdateRequest request = mapToWorkloadRequest(training, "ADD");
-        workloadFeignClient.updateWorkload(request, "Bearer " + jwt, transactionId);
+        jmsTemplate.convertAndSend(WORKLOAD_QUEUE, request);
     }
 
     @Override
