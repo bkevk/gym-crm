@@ -28,7 +28,10 @@ public class TrainingServiceImpl implements TrainingService {
         trainingRepository.save(training);
         log.info("Created Training: {}", training);
         WorkloadUpdateRequest request = mapToWorkloadRequest(training, "ADD");
-        jmsTemplate.convertAndSend(WORKLOAD_QUEUE, request);
+        if(jmsTemplate != null){
+            jmsTemplate.convertAndSend(WORKLOAD_QUEUE, request);
+        }
+
     }
 
     @Override
@@ -72,10 +75,13 @@ public class TrainingServiceImpl implements TrainingService {
 
     private WorkloadUpdateRequest mapToWorkloadRequest(Training training, String actionType) {
         WorkloadUpdateRequest req = new WorkloadUpdateRequest();
-        req.setTrainerUsername(training.getTrainer().getUsername());
-        req.setFirstName(training.getTrainer().getFirstName());
-        req.setLastName(training.getTrainer().getLastName());
-        req.setActive(training.getTrainer().isActive());
+        if(training.getTrainer() != null){
+            req.setTrainerUsername(training.getTrainer().getUsername());
+            req.setFirstName(training.getTrainer().getFirstName());
+            req.setLastName(training.getTrainer().getLastName());
+            req.setActive(training.getTrainer().isActive());
+        }
+
         req.setTrainingDate(training.getDate().toLocalDate());
         req.setTrainingDuration(training.getDuration());
         req.setActionType(actionType);
