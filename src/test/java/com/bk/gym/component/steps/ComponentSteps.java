@@ -3,12 +3,15 @@ package com.bk.gym.component.steps;
 import io.cucumber.java.en.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ContextConfiguration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Component
+@SpringBootTest
+@ContextConfiguration
 public class ComponentSteps {
 
     @Autowired
